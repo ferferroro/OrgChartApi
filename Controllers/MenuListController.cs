@@ -9,7 +9,7 @@ namespace OrgChartApi.Controllers
 {
     [Route("v1/[controller]")]
     [ApiController]
-    public class MenuController : ControllerBase
+    public class MenuListController : ControllerBase
     {
         // GET: v1/<controller>
         [HttpGet("{menu_type}")]
