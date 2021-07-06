@@ -31,6 +31,7 @@ namespace OrgChartApi
 
             string mySqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");  
             services.AddDbContextPool<CompanyContext>(options => options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));  
+            services.AddDbContextPool<DepartmentContext>(options => options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));  
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
