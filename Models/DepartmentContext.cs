@@ -10,7 +10,5 @@ namespace OrgChartApi.Models
         }
  
         public DbSet<Department> Department { get; set; }
- 
-        public DbSet<Company> Company { get; set; }
     }
 }

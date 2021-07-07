@@ -8,7 +8,7 @@ using OrgChartApi.Models;
 namespace OrgChartApi.Migrations.Department
 {
     [DbContext(typeof(DepartmentContext))]
-    [Migration("20210706155619_AddDepartment")]
+    [Migration("20210707131304_AddDepartment")]
     partial class AddDepartment
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
