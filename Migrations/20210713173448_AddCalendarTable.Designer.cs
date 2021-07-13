@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrgChartApi.Models;
 
-namespace OrgChartApi.Migrations.Calendar
+namespace OrgChartApi.Migrations
 {
-    [DbContext(typeof(CalendarContext))]
-    [Migration("20210708163112_AddCalendar")]
-    partial class AddCalendar
+    [DbContext(typeof(OrgChartContext))]
+    [Migration("20210713173448_AddCalendarTable")]
+    partial class AddCalendarTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -62,6 +62,51 @@ namespace OrgChartApi.Migrations.Calendar
                     b.HasIndex("CalendarId");
 
                     b.ToTable("CalendarEvent");
+                });
+
+            modelBuilder.Entity("Company", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Company");
+                });
+
+            modelBuilder.Entity("Department", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Department");
+                });
+
+            modelBuilder.Entity("Employee", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Employee");
                 });
 
             modelBuilder.Entity("CalendarEvent", b =>

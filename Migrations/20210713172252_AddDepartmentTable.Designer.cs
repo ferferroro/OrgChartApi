@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrgChartApi.Models;
 
-namespace OrgChartApi.Migrations.Employee
+namespace OrgChartApi.Migrations
 {
-    [DbContext(typeof(EmployeeContext))]
-    [Migration("20210707132426_AddEmployee")]
-    partial class AddEmployee
+    [DbContext(typeof(OrgChartContext))]
+    [Migration("20210713172252_AddDepartmentTable")]
+    partial class AddDepartmentTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,7 +18,7 @@ namespace OrgChartApi.Migrations.Employee
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.7");
 
-            modelBuilder.Entity("Employee", b =>
+            modelBuilder.Entity("Company", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,7 +30,22 @@ namespace OrgChartApi.Migrations.Employee
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employee");
+                    b.ToTable("Company");
+                });
+
+            modelBuilder.Entity("Department", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Department");
                 });
 #pragma warning restore 612, 618
         }

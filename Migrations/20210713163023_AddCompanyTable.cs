@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace OrgChartApi.Migrations.Employee
+namespace OrgChartApi.Migrations
 {
-    public partial class AddEmployee : Migration
+    public partial class AddCompanyTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +11,7 @@ namespace OrgChartApi.Migrations.Employee
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Employee",
+                name: "Company",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -21,7 +21,7 @@ namespace OrgChartApi.Migrations.Employee
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employee", x => x.Id);
+                    table.PrimaryKey("PK_Company", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
         }
@@ -29,7 +29,7 @@ namespace OrgChartApi.Migrations.Employee
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Employee");
+                name: "Company");
         }
     }
 }

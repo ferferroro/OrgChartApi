@@ -13,9 +13,9 @@ namespace OrgChartApi.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly EmployeeContext _context;
+        private readonly OrgChartContext _context;
 
-        public EmployeeController(EmployeeContext context)
+        public EmployeeController(OrgChartContext context)
         {
             _context = context;
         }

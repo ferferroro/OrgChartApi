@@ -1,17 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace OrgChartApi.Migrations.Department
+namespace OrgChartApi.Migrations
 {
-    public partial class AddDepartment : Migration
+    public partial class AddEmployeeTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
-
             migrationBuilder.CreateTable(
-                name: "Department",
+                name: "Employee",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -21,7 +18,7 @@ namespace OrgChartApi.Migrations.Department
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Department", x => x.Id);
+                    table.PrimaryKey("PK_Employee", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
         }
@@ -29,7 +26,7 @@ namespace OrgChartApi.Migrations.Department
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Department");
+                name: "Employee");
         }
     }
 }

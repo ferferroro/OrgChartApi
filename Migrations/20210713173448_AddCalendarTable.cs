@@ -2,15 +2,12 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace OrgChartApi.Migrations.Calendar
+namespace OrgChartApi.Migrations
 {
-    public partial class AddCalendar : Migration
+    public partial class AddCalendarTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
-
             migrationBuilder.CreateTable(
                 name: "Calendar",
                 columns: table => new

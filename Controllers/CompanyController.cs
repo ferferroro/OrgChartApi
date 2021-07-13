@@ -13,9 +13,9 @@ namespace OrgChartApi.Controllers
     [ApiController]
     public class CompanyController : ControllerBase
     {
-        private readonly CompanyContext _context;
+        private readonly OrgChartContext _context;
 
-        public CompanyController(CompanyContext context)
+        public CompanyController(OrgChartContext context)
         {
             _context = context;
         }

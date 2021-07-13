@@ -13,9 +13,9 @@ namespace OrgChartApi.Controllers
     [ApiController]
     public class CalendarEventController : ControllerBase
     {
-        private readonly CalendarEventContext _context;
+        private readonly OrgChartContext _context;
 
-        public CalendarEventController(CalendarEventContext context)
+        public CalendarEventController(OrgChartContext context)
         {
             _context = context;
         }

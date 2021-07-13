@@ -13,9 +13,9 @@ namespace OrgChartApi.Controllers
     [ApiController]
     public class DepartmentController : ControllerBase
     {
-        private readonly DepartmentContext _context;
+        private readonly OrgChartContext _context;
 
-        public DepartmentController(DepartmentContext context)
+        public DepartmentController(OrgChartContext context)
         {
             _context = context;
         }
