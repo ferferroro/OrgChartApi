@@ -79,6 +79,7 @@ namespace OrgChartApi.Controllers
         {
             _context.CalendarEvent.Add(calendarEvent);
             await _context.SaveChangesAsync();
+            
 
             return CreatedAtAction("GetCalendarEvent", new { id = calendarEvent.Id }, calendarEvent);
         }

@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using OrgChartApi.Models; 
 using Microsoft.EntityFrameworkCore; 
+using FluentValidation.AspNetCore;
 
 namespace OrgChartApi
 {
@@ -32,7 +33,18 @@ namespace OrgChartApi
             string mySqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");  
             services.AddDbContextPool<OrgChartContext>(options => options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));  
 
-            services.AddControllers();
+            
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+            
+            services.AddControllers().
+                AddFluentValidation(s => 
+                { 
+                    s.RegisterValidatorsFromAssemblyContaining<Startup>(); 
+                    s.RunDefaultMvcValidationAfterFluentValidationExecutes = false; 
+                });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OrgChartApi", Version = "v1" });
