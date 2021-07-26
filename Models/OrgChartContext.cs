@@ -14,5 +14,7 @@ namespace OrgChartApi.Models
         public DbSet<Employee> Employee { get; set; }
         public DbSet<Calendar> Calendar { get; set; }
         public DbSet<CalendarEvent> CalendarEvent { get; set; }
+        public DbSet<Payroll> Payroll { get; set; }
+
     }
 }
