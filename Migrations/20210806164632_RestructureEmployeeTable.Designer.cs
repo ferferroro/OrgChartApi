@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrgChartApi.Models;
 
 namespace OrgChartApi.Migrations
 {
     [DbContext(typeof(OrgChartContext))]
-    partial class OrgChartContextModelSnapshot : ModelSnapshot
+    [Migration("20210806164632_RestructureEmployeeTable")]
+    partial class RestructureEmployeeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
