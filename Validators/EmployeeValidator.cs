@@ -16,5 +16,10 @@ public class EmployeeValidator : AbstractValidator<Employee>
                 })
                 .WithMessage("'Username' already exists");
         RuleFor(p => p.Password).NotEmpty();
+        RuleFor(p => p.ConfirmPassword)
+            .NotEmpty()
+            .Equal(p => p.Password)
+            .WithMessage("'Confirm Password' does not match");
+        
     }
 }
