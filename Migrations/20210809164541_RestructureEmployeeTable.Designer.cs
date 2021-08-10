@@ -9,7 +9,7 @@ using OrgChartApi.Models;
 namespace OrgChartApi.Migrations
 {
     [DbContext(typeof(OrgChartContext))]
-    [Migration("20210806164632_RestructureEmployeeTable")]
+    [Migration("20210809164541_RestructureEmployeeTable")]
     partial class RestructureEmployeeTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
