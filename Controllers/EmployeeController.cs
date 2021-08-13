@@ -45,11 +45,11 @@ namespace OrgChartApi.Controllers
                     );
                 }
 
-                if (employee.FindByUsername != null) {
-                    query = query.Where(t => 
-                        t.Username.Contains(employee.FindByUsername) 
-                    );
-                }
+                // if (employee.FindByUsername != null) {
+                //     query = query.Where(t => 
+                //         t.Username.Contains(employee.FindByUsername) 
+                //     );
+                // }
 
             } 
 
@@ -82,11 +82,11 @@ namespace OrgChartApi.Controllers
                         );
                     }
 
-                    if (employee.SortField == "Username") {
-                        query = query.OrderBy(t => 
-                            t.Username
-                        );
-                    }
+                    // if (employee.SortField == "Username") {
+                    //     query = query.OrderBy(t => 
+                    //         t.Username
+                    //     );
+                    // }
                 }
 
                 if (sortOrder == "desc") {
@@ -109,11 +109,11 @@ namespace OrgChartApi.Controllers
                         );
                     }
 
-                    if (employee.SortField == "Username") {
-                        query = query.OrderByDescending(t => 
-                            t.Username
-                        );
-                    }
+                    // if (employee.SortField == "Username") {
+                    //     query = query.OrderByDescending(t => 
+                    //         t.Username
+                    //     );
+                    // }
                 }
                 
             }
@@ -182,8 +182,8 @@ namespace OrgChartApi.Controllers
             // only if if the value is not null, the field will change.
             _context.Entry(employee).Property(p => p.FirstName).IsModified = employee.FirstName != null;
             _context.Entry(employee).Property(p => p.LastName).IsModified = employee.LastName != null;
-            _context.Entry(employee).Property(p => p.Username).IsModified = employee.Username != null;
-            _context.Entry(employee).Property(p => p.Password).IsModified = false;
+            // _context.Entry(employee).Property(p => p.Username).IsModified = employee.Username != null;
+            // _context.Entry(employee).Property(p => p.Password).IsModified = false;
             
             try
             {

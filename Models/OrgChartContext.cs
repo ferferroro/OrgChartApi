@@ -1,8 +1,12 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
+// using System.Data.Entity.Core.ModelConfiguration;
  
 namespace OrgChartApi.Models
 {
-    public class OrgChartContext : DbContext
+    public class OrgChartContext : IdentityDbContext
     {
         public OrgChartContext(DbContextOptions<OrgChartContext> options)
             : base(options)
@@ -14,7 +18,7 @@ namespace OrgChartApi.Models
         public DbSet<Employee> Employee { get; set; }
         public DbSet<Calendar> Calendar { get; set; }
         public DbSet<CalendarEvent> CalendarEvent { get; set; }
-        public DbSet<Payroll> Payroll { get; set; }
+        public DbSet<Payroll> Payroll { get; set; }       
 
     }
 }

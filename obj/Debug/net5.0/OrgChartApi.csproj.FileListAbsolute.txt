@@ -142,3 +142,13 @@
 /home/romel/Projects/assignment/OrgChartApi/bin/Debug/net5.0/Microsoft.AspNetCore.JsonPatch.dll
 /home/romel/Projects/assignment/OrgChartApi/bin/Debug/net5.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 /home/romel/Projects/assignment/OrgChartApi/bin/Debug/net5.0/Newtonsoft.Json.Bson.dll
+/home/romel/Projects/assignment/OrgChartApi/bin/Debug/net5.0/OrgChartApi.StaticWebAssets.xml
+/home/romel/Projects/assignment/OrgChartApi/bin/Debug/net5.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/home/romel/Projects/assignment/OrgChartApi/bin/Debug/net5.0/Microsoft.AspNetCore.Cryptography.Internal.dll
+/home/romel/Projects/assignment/OrgChartApi/bin/Debug/net5.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+/home/romel/Projects/assignment/OrgChartApi/bin/Debug/net5.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+/home/romel/Projects/assignment/OrgChartApi/bin/Debug/net5.0/Microsoft.AspNetCore.Identity.UI.Views.V4.dll
+/home/romel/Projects/assignment/OrgChartApi/bin/Debug/net5.0/Microsoft.AspNetCore.Identity.UI.dll
+/home/romel/Projects/assignment/OrgChartApi/bin/Debug/net5.0/Microsoft.Extensions.FileProviders.Embedded.dll
+/home/romel/Projects/assignment/OrgChartApi/bin/Debug/net5.0/Microsoft.Extensions.Identity.Core.dll
+/home/romel/Projects/assignment/OrgChartApi/bin/Debug/net5.0/Microsoft.Extensions.Identity.Stores.dll

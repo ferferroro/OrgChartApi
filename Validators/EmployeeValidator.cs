@@ -13,18 +13,18 @@ public class EmployeeValidator : AbstractValidator<Employee>
         if (requestMethod == "POST") {
             RuleFor(p => p.FirstName).NotEmpty();
             RuleFor(p => p.LastName).NotEmpty();
-            RuleFor(p => p.Username)
-                .NotEmpty()
-                .Must(Username =>
-                    {
-                        return _context.Employee.FirstOrDefault(x => x.Username == Username) == null;
-                    })
-                    .WithMessage("'Username' already exists");
-            RuleFor(p => p.Password).NotEmpty();
-            RuleFor(p => p.ConfirmPassword)
-                .NotEmpty()
-                .Equal(p => p.Password)
-                .WithMessage("'Confirm Password' does not match");
+            // RuleFor(p => p.Username)
+            //     .NotEmpty()
+            //     .Must(Username =>
+            //         {
+            //             return _context.Employee.FirstOrDefault(x => x.Username == Username) == null;
+            //         })
+            //         .WithMessage("'Username' already exists");
+            // RuleFor(p => p.Password).NotEmpty();
+            // RuleFor(p => p.ConfirmPassword)
+            //     .NotEmpty()
+            //     .Equal(p => p.Password)
+            //     .WithMessage("'Confirm Password' does not match");
             
         }
 
@@ -55,8 +55,7 @@ public class EmployeeValidator : AbstractValidator<Employee>
                         {
                             return SortField == "Id" || 
                                 SortField == "FirstName" ||
-                                SortField == "LastName" ||
-                                SortField == "Username";
+                                SortField == "LastName";
                         })
                     .WithMessage("'SortField' value must only be 'Id,FirstName,LastName' or 'Username'");
             });    
@@ -65,25 +64,25 @@ public class EmployeeValidator : AbstractValidator<Employee>
         // Validation rules for PUT Requests
         if (requestMethod == "PUT") {
 
-            When(payload => payload.Username != null, () => {
-                RuleFor(payload => payload.Username)
-                    .Must( (payload, Username) => { 
-                        var findEmployeeByUserName = _context.Employee.FirstOrDefault(x => x.Username == Username);
+            // When(payload => payload.Username != null, () => {
+            //     RuleFor(payload => payload.Username)
+            //         .Must( (payload, Username) => { 
+            //             var findEmployeeByUserName = _context.Employee.FirstOrDefault(x => x.Username == Username);
 
-                        if (findEmployeeByUserName == null) {
-                            return true;
-                        }
-                        else {
-                            if (findEmployeeByUserName.Id == payload.Id) {
-                                return true;
-                            }
-                            else {
-                                return false;
-                            }
-                        }
-                    })
-                    .WithMessage("'Username' already taken");  
-            });   
+            //             if (findEmployeeByUserName == null) {
+            //                 return true;
+            //             }
+            //             else {
+            //                 if (findEmployeeByUserName.Id == payload.Id) {
+            //                     return true;
+            //                 }
+            //                 else {
+            //                     return false;
+            //                 }
+            //             }
+            //         })
+            //         .WithMessage("'Username' already taken");  
+            // });   
 
         } 
 

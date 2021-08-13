@@ -14,6 +14,11 @@ using Microsoft.OpenApi.Models;
 using OrgChartApi.Models; 
 using Microsoft.EntityFrameworkCore; 
 using FluentValidation.AspNetCore;
+using OrgChartApi.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
 
 namespace OrgChartApi
 {
@@ -29,10 +34,32 @@ namespace OrgChartApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
 
             string mySqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");  
             services.AddDbContextPool<OrgChartContext>(options => options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));  
 
+            services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(jwt => {
+                var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+
+                jwt.SaveToken = true;
+                jwt.TokenValidationParameters = new TokenValidationParameters {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    RequireExpirationTime = false
+                };
+            });
+
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                        .AddEntityFrameworkStores<OrgChartContext>();
             
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
@@ -64,6 +91,8 @@ namespace OrgChartApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
