@@ -1,5 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-public class Company
+public class Company : Entity
 {
     public long Id { get; set; }
     

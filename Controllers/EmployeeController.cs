@@ -8,13 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using OrgChartApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using OrgChartApi.Controllers.Base;
+using OrgChartApi.Models.DTOs.Requests;
 
 namespace OrgChartApi.Controllers
 {
     [Route("v1/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class EmployeeController : ControllerBase
+    public class EmployeeController : EntityBaseController
     {
         private readonly OrgChartContext _context;
 
@@ -25,120 +27,14 @@ namespace OrgChartApi.Controllers
 
         // GET: api/Employee
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployee(Employee employee)
+        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployee(EmployeeRequest employee)
         {
 
             IQueryable<Employee> query = _context.Set<Employee>();
 
-            if (employee.FindById != 0) {
-                query = query.Where(t => 
-                    t.Id == employee.FindById
-                );
-            }
-            else {
-                if (employee.FindByFirstName != null) {
-                    query = query.Where(t => 
-                        t.FirstName.Contains(employee.FindByFirstName) 
-                    );
-                }
+            FilterEntityRequest(ref query, employee);
 
-                if (employee.FindByLastName != null) {
-                    query = query.Where(t => 
-                        t.LastName.Contains(employee.FindByLastName) 
-                    );
-                }
-
-                // if (employee.FindByUsername != null) {
-                //     query = query.Where(t => 
-                //         t.Username.Contains(employee.FindByUsername) 
-                //     );
-                // }
-
-            } 
-
-            if (employee.SortField != null) {
-
-                string sortOrder = employee.SortOrder;
-
-                if (sortOrder == null) {
-                    sortOrder = "asc";
-                }
-
-
-                if (sortOrder == "asc") {
-
-                    if (employee.SortField == "Id") {
-                        query = query.OrderBy(t => 
-                            t.Id
-                        );
-                    }
-
-                    if (employee.SortField == "Firstname") {
-                        query = query.OrderBy(t => 
-                            t.FirstName
-                        );
-                    }
-
-                    if (employee.SortField == "LastName") {
-                        query = query.OrderBy(t => 
-                            t.LastName
-                        );
-                    }
-
-                    // if (employee.SortField == "Username") {
-                    //     query = query.OrderBy(t => 
-                    //         t.Username
-                    //     );
-                    // }
-                }
-
-                if (sortOrder == "desc") {
-
-                    if (employee.SortField == "Id") {
-                        query = query.OrderByDescending(t => 
-                            t.Id
-                        );
-                    }
-
-                    if (employee.SortField == "Firstname") {
-                        query = query.OrderByDescending(t => 
-                            t.FirstName
-                        );
-                    }
-
-                    if (employee.SortField == "LastName") {
-                        query = query.OrderByDescending(t => 
-                            t.LastName
-                        );
-                    }
-
-                    // if (employee.SortField == "Username") {
-                    //     query = query.OrderByDescending(t => 
-                    //         t.Username
-                    //     );
-                    // }
-                }
-                
-            }
-
-            int pageSize = employee.FindByPageSize;
-            if (pageSize == 0) {
-                pageSize = 20;
-            }
-
-            int pageNumber = employee.FindByPageNumber;
-            if (pageNumber == 0) {
-                pageNumber = 1;
-            }
-
-            query = query
-                .Skip(pageSize * (pageNumber - 1))
-                .Take(pageSize);
-
-            return await query.ToListAsync(); 
-
-            // below is our original scafolded code           
-            // return await _context.Employee.ToListAsync();            
+            return await query.ToListAsync();          
         }
 
         // GET: api/Employee/5

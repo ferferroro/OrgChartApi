@@ -8,13 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using OrgChartApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using OrgChartApi.Models.DTOs.Requests;
+using OrgChartApi.Controllers.Base;
 
 namespace OrgChartApi.Controllers
 {
     [Route("v1/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class CompanyController : ControllerBase
+    public class CompanyController : EntityBaseController
     {
         private readonly OrgChartContext _context;
 
@@ -25,9 +27,16 @@ namespace OrgChartApi.Controllers
 
         // GET: api/Company
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Company>>> GetCompany()
+        public async Task<ActionResult<IEnumerable<Company>>> GetCompany(CompanyRequest company)
         {
-            return await _context.Company.ToListAsync();
+            IQueryable<Company> query = _context.Set<Company>();
+
+            FilterEntityRequest(ref query, company);
+
+            return await query.ToListAsync(); 
+
+            // below is the original scafolded code:
+            // return await _context.Company.ToListAsync();
         }
 
         // GET: api/Company/5
@@ -78,7 +87,7 @@ namespace OrgChartApi.Controllers
         // POST: api/Company
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Company>> PostCompany(Company company)
+        public async Task<ActionResult<Company>> PostCompany(CompanyRequest company)
         {
             _context.Company.Add(company);
             await _context.SaveChangesAsync();

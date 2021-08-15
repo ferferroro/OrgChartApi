@@ -8,13 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using OrgChartApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using OrgChartApi.Models.DTOs.Requests;
+using OrgChartApi.Controllers.Base;
 
 namespace OrgChartApi.Controllers
 {
     [Route("v1/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class DepartmentController : ControllerBase
+    public class DepartmentController : EntityBaseController
     {
         private readonly OrgChartContext _context;
 
@@ -25,9 +27,13 @@ namespace OrgChartApi.Controllers
 
         // GET: api/Department
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Department>>> GetDepartment()
-        {
-            return await _context.Department.ToListAsync();
+        public async Task<ActionResult<IEnumerable<Department>>> GetDepartment(DepartmentRequest department)
+        {            
+            IQueryable<Department> query = _context.Set<Department>();
+
+            FilterEntityRequest(ref query, department);
+
+            return await query.ToListAsync();
         }
 
         // GET: api/Department/5
@@ -106,5 +112,6 @@ namespace OrgChartApi.Controllers
         {
             return _context.Department.Any(e => e.Id == id);
         }
+
     }
 }

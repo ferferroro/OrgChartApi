@@ -2,8 +2,9 @@ using FluentValidation;
 using OrgChartApi.Models; 
 using System.Linq;
 using Microsoft.AspNetCore.Http;
+using OrgChartApi.Models.DTOs.Requests;
 
-public class EmployeeValidator : AbstractValidator<Employee>
+public class EmployeeValidator : AbstractValidator<EmployeeRequest>
 {
     public EmployeeValidator(OrgChartContext _context, IHttpContextAccessor _httpContext)
     {
