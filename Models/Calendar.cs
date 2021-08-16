@@ -1,6 +1,5 @@
-using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
-public class Calendar
+public class Calendar : SearchFilters
 {
     public long Id { get; set; }
     public string Name { get; set; }

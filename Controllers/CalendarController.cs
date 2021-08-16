@@ -8,13 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using OrgChartApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using OrgChartApi.Models.DTOs.Requests;
+using OrgChartApi.Controllers.Base;
 
 namespace OrgChartApi.Controllers
 {
     [Route("v1/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class CalendarController : ControllerBase
+    public class CalendarController : EntityBaseController
     {
         private readonly OrgChartContext _context;
 
@@ -25,9 +27,13 @@ namespace OrgChartApi.Controllers
 
         // GET: api/Calendar
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Calendar>>> GetCalendar()
+        public async Task<ActionResult<IEnumerable<Calendar>>> GetCalendar(CalendarRequest calendar)
         {
-            return await _context.Calendar.ToListAsync();
+            IQueryable<Calendar> query = _context.Set<Calendar>();
+
+            FilterEntityRequest(ref query, calendar);
+
+            return await query.ToListAsync(); 
         }
 
         // GET: api/Calendar/5
@@ -47,7 +53,7 @@ namespace OrgChartApi.Controllers
         // PUT: api/Calendar/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCalendar(long id, Calendar calendar)
+        public async Task<IActionResult> PutCalendar(long id, CalendarRequest calendar)
         {
             if (id != calendar.Id)
             {
@@ -78,7 +84,7 @@ namespace OrgChartApi.Controllers
         // POST: api/Calendar
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Calendar>> PostCalendar(Calendar calendar)
+        public async Task<ActionResult<Calendar>> PostCalendar(CalendarRequest calendar)
         {
             _context.Calendar.Add(calendar);
             await _context.SaveChangesAsync();
