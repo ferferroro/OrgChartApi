@@ -8,13 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using OrgChartApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using OrgChartApi.Models.DTOs.Requests;
+using OrgChartApi.Controllers.Base;
 
 namespace OrgChartApi.Controllers
 {
     [Route("v1/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class PayrollController : ControllerBase
+    public class PayrollController : EntityBaseController
     {
         private readonly OrgChartContext _context;
 
@@ -25,9 +27,13 @@ namespace OrgChartApi.Controllers
 
         // GET: api/Payroll
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Payroll>>> GetPayroll()
+        public async Task<ActionResult<IEnumerable<Payroll>>> GetPayroll(PayrollRequest payroll)
         {
-            return await _context.Payroll.ToListAsync();
+            IQueryable<Payroll> query = _context.Set<Payroll>();
+
+            FilterEntityRequest(ref query, payroll);
+
+            return await query.ToListAsync(); 
         }
 
         // GET: api/Payroll/5
@@ -47,7 +53,7 @@ namespace OrgChartApi.Controllers
         // PUT: api/Payroll/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPayroll(long id, Payroll payroll)
+        public async Task<IActionResult> PutPayroll(long id, PayrollRequest payroll)
         {
             if (id != payroll.Id)
             {
@@ -78,7 +84,7 @@ namespace OrgChartApi.Controllers
         // POST: api/Payroll
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Payroll>> PostPayroll(Payroll payroll)
+        public async Task<ActionResult<Payroll>> PostPayroll(PayrollRequest payroll)
         {
             _context.Payroll.Add(payroll);
             await _context.SaveChangesAsync();
