@@ -5,38 +5,15 @@ using Microsoft.AspNetCore.Http;
 using OrgChartApi.Models;
 using OrgChartApi.Models.DTOs.Requests;
 
-public class WorkStatusesValidator : AbstractValidator<WorkStatusesRequest>
+public class TeamValidator : AbstractValidator<TeamRequest>
 {
-    public WorkStatusesValidator(OrgChartContext _context, IHttpContextAccessor _httpContext)
+    public TeamValidator(OrgChartContext _context, IHttpContextAccessor _httpContext)
     {
         string requestMethod = _httpContext.HttpContext.Request.Method;
 
         // Validation rules for POST requests
-        if ( HttpMethods.IsPost(requestMethod) || HttpMethods.IsPut(requestMethod)) {
-            RuleFor(p => p.WorkStatusTemplateId).NotEmpty();
-
-            When(p => p.WorkStatusTemplateId != 0, () => {
-                RuleFor(p => p.WorkStatusTemplateId)
-                    .Must( (p, WorkStatusTemplateId) => { 
-                        var findWorkStatusTemplate = _context.WorkStatusTemplate.FirstOrDefault(x => x.Id == WorkStatusTemplateId);
-                        return (findWorkStatusTemplate != null); 
-                    })
-                    .WithMessage("'WorkStatusTemplateId' does not exists");  
-            });   
-
-            RuleFor(p => p.WorkStatusId).NotEmpty();
-
-            When(p => p.WorkStatusId != 0, () => {
-                RuleFor(p => p.WorkStatusId)
-                    .Must( (p, WorkStatusId) => { 
-                        var findWorkStatus = _context.WorkStatus.FirstOrDefault(x => x.Id == WorkStatusId);
-                        return (findWorkStatus != null); 
-                    })
-                    .WithMessage("'WorkStatusId' does not exists");  
-            });   
-
-
-
+        if ( HttpMethods.IsPost(requestMethod)) {
+            RuleFor(p => p.Name).NotEmpty();
         
             // soon we add checking if child records are available
         }

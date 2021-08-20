@@ -23,6 +23,8 @@ namespace OrgChartApi.Models
         public DbSet<WorkStatusTemplate> WorkStatusTemplate { get; set; } 
         public DbSet<WorkStatus> WorkStatus { get; set; } 
         public DbSet<WorkStatuses> WorkStatuses { get; set; } 
+        public DbSet<Team> Team { get; set; } 
+        public DbSet<SubTeam> SubTeam { get; set; } 
 
     }
 }
