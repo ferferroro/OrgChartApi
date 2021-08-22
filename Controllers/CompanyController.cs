@@ -33,7 +33,11 @@ namespace OrgChartApi.Controllers
 
             FilterEntityRequest(ref query, company);
 
-            return await query.ToListAsync(); 
+            return await query
+                .Include(p => p.Calendar)
+                .Include(p => p.Payroll)
+                .Include(p => p.WorkStatusTemplate)
+                .ToListAsync(); 
 
             // below is the original scafolded code:
             // return await _context.Company.ToListAsync();

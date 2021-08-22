@@ -33,7 +33,11 @@ namespace OrgChartApi.Controllers
 
             FilterEntityRequest(ref query, department);
 
-            return await query.ToListAsync();
+            return await query
+                .Include(p => p.Calendar)
+                .Include(p => p.Payroll)
+                .Include(p => p.WorkStatusTemplate)
+                .ToListAsync(); 
         }
 
         // GET: api/Department/5

@@ -36,6 +36,9 @@ namespace OrgChartApi.Controllers
 
             return await query
                 .Include(p => p.SubTeam)
+                .Include(p => p.Calendar)
+                .Include(p => p.Payroll)
+                .Include(p => p.WorkStatusTemplate)
                 .ToListAsync(); 
         }
 
