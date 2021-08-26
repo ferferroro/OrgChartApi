@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrgChartApi.Models;
 
 namespace OrgChartApi.Migrations
 {
     [DbContext(typeof(OrgChartContext))]
-    partial class OrgChartContextModelSnapshot : ModelSnapshot
+    [Migration("20210826162230_AddEntityMembersTable")]
+    partial class AddEntityMembersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,19 +172,19 @@ namespace OrgChartApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CompanyId")
+                    b.Property<long>("CompanyId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("DepartmentId")
+                    b.Property<long>("DepartmentId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("EmployeeId")
+                    b.Property<long>("EmployeeId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("SubTeamId")
+                    b.Property<long>("SubTeamId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("TeamId")
+                    b.Property<long>("TeamId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -654,23 +656,33 @@ namespace OrgChartApi.Migrations
                 {
                     b.HasOne("Company", "Company")
                         .WithMany("EntityMembers")
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Department", "Department")
                         .WithMany("EntityMembers")
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Employee", "Employee")
                         .WithMany("EntityMembers")
-                        .HasForeignKey("EmployeeId");
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SubTeam", "SubTeam")
                         .WithMany("EntityMembers")
-                        .HasForeignKey("SubTeamId");
+                        .HasForeignKey("SubTeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Team", "Team")
                         .WithMany("EntityMembers")
-                        .HasForeignKey("TeamId");
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Company");
 

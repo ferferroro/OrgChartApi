@@ -25,6 +25,7 @@ namespace OrgChartApi.Models
         public DbSet<WorkStatuses> WorkStatuses { get; set; } 
         public DbSet<Team> Team { get; set; } 
         public DbSet<SubTeam> SubTeam { get; set; } 
+        public DbSet<EntityMembers> EntityMembers { get; set; } 
 
     }
 }

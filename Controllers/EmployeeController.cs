@@ -38,6 +38,7 @@ namespace OrgChartApi.Controllers
                 .Include(p => p.Calendar)
                 .Include(p => p.Payroll)
                 .Include(p => p.WorkStatusTemplate)
+                .Include(p => p.EntityMembers)
                 .ToListAsync();        
         }
 

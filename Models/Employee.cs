@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 // using System.Text.Json.Serialization;
@@ -15,6 +16,10 @@ public class Employee : Entity
     // // validation field
     // [NotMapped] 
     // public string ConfirmPassword { internal get; set; }
+
+
+    [JsonProperty(PropertyName = "MemberOf")]
+    public List<EntityMembers> EntityMembers { get; set; }
 
 }
 

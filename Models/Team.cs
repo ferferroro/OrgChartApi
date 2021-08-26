@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
 public class Team : Entity
@@ -9,5 +8,8 @@ public class Team : Entity
 
     [JsonProperty(PropertyName = "SubTeam")]
     public List<SubTeam> SubTeam { get; set; }
+
+    [JsonProperty(PropertyName = "Members")]
+    public List<EntityMembers> EntityMembers { get; set; }
 
 }

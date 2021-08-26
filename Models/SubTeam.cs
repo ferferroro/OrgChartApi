@@ -20,4 +20,8 @@ public class SubTeam : Entity
 
     [JsonProperty(PropertyName = "SubTeam")]
     public List<SubTeam> SubSubTeam { get; set; }
+
+
+    [JsonProperty(PropertyName = "Members")]
+    public List<EntityMembers> EntityMembers { get; set; }
 }
