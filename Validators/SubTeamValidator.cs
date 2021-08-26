@@ -127,6 +127,15 @@ public class SubTeamValidator : AbstractValidator<SubTeamRequest>
                         })
                     .WithMessage("'WorkStatusTemplateId' does not exists");
             });  
+
+            When(payload => payload.EmployeeId != null, () => {
+                RuleFor(payload => payload.EmployeeId)
+                    .Must(EmployeeId =>
+                        {
+                            return _context.Employee.FirstOrDefault(x => x.Id == EmployeeId) != null;
+                        })
+                    .WithMessage("'EmployeeId' does not exists");
+            });  
         }
 
     }

@@ -37,6 +37,7 @@ namespace OrgChartApi.Controllers
                 .Include(p => p.Calendar)
                 .Include(p => p.Payroll)
                 .Include(p => p.WorkStatusTemplate)
+                .Include(p => p.Employee)
                 .ToListAsync(); 
         }
 
@@ -69,6 +70,7 @@ namespace OrgChartApi.Controllers
             _context.Entry(department).Property(p => p.CalendarId).IsModified = department.CalendarId != null;
             _context.Entry(department).Property(p => p.PayrollId).IsModified = department.PayrollId != null;
             _context.Entry(department).Property(p => p.WorkStatusTemplateId).IsModified = department.WorkStatusTemplateId != null;
+            _context.Entry(department).Property(p => p.EmployeeId).IsModified = department.EmployeeId != null;
 
             try
             {

@@ -19,6 +19,12 @@ public class Entity : SearchFilters
     public WorkStatusTemplate WorkStatusTemplate { get; set; }
     public long? WorkStatusTemplateId { get; set; }
 
+    [ForeignKey("EmployeeId")]
+    [JsonProperty(PropertyName = "Head")]
+    public Employee Employee { get; set; }
+    
+    public long? EmployeeId { get; set; }
+
     
 
 }

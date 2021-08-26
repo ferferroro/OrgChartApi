@@ -37,6 +37,7 @@ namespace OrgChartApi.Controllers
                 .Include(p => p.Calendar)
                 .Include(p => p.Payroll)
                 .Include(p => p.WorkStatusTemplate)
+                .Include(p => p.Employee)
                 .ToListAsync(); 
 
             // below is the original scafolded code:
@@ -72,6 +73,7 @@ namespace OrgChartApi.Controllers
             _context.Entry(company).Property(p => p.CalendarId).IsModified = company.CalendarId != null;
             _context.Entry(company).Property(p => p.PayrollId).IsModified = company.PayrollId != null;
             _context.Entry(company).Property(p => p.WorkStatusTemplateId).IsModified = company.WorkStatusTemplateId != null;
+            _context.Entry(company).Property(p => p.EmployeeId).IsModified = company.EmployeeId != null;
 
             try
             {
