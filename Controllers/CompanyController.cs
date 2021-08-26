@@ -60,14 +60,18 @@ namespace OrgChartApi.Controllers
         // PUT: api/Company/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompany(long id, Company company)
+        public async Task<IActionResult> PutCompany(long id, CompanyRequest company)
         {
             if (id != company.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(company).State = EntityState.Modified;
+            // _context.Entry(company).State = EntityState.Modified;
+            _context.Entry(company).Property(p => p.Name).IsModified = company.Name != null;
+            _context.Entry(company).Property(p => p.CalendarId).IsModified = company.CalendarId != null;
+            _context.Entry(company).Property(p => p.PayrollId).IsModified = company.PayrollId != null;
+            _context.Entry(company).Property(p => p.WorkStatusTemplateId).IsModified = company.WorkStatusTemplateId != null;
 
             try
             {

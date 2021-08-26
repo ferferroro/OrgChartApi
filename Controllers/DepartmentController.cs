@@ -57,14 +57,18 @@ namespace OrgChartApi.Controllers
         // PUT: api/Department/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDepartment(long id, Department department)
+        public async Task<IActionResult> PutDepartment(long id, DepartmentRequest department)
         {
             if (id != department.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(department).State = EntityState.Modified;
+            // _context.Entry(department).State = EntityState.Modified;
+            _context.Entry(department).Property(p => p.Name).IsModified = department.Name != null;
+            _context.Entry(department).Property(p => p.CalendarId).IsModified = department.CalendarId != null;
+            _context.Entry(department).Property(p => p.PayrollId).IsModified = department.PayrollId != null;
+            _context.Entry(department).Property(p => p.WorkStatusTemplateId).IsModified = department.WorkStatusTemplateId != null;
 
             try
             {
@@ -88,7 +92,7 @@ namespace OrgChartApi.Controllers
         // POST: api/Department
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Department>> PostDepartment(Department department)
+        public async Task<ActionResult<Department>> PostDepartment(DepartmentRequest department)
         {
             _context.Department.Add(department);
             await _context.SaveChangesAsync();

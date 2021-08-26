@@ -66,7 +66,13 @@ namespace OrgChartApi.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(subTeam).State = EntityState.Modified;
+            // _context.Entry(subTeam).State = EntityState.Modified;
+            _context.Entry(subTeam).Property(p => p.Name).IsModified = subTeam.Name != null;
+            _context.Entry(subTeam).Property(p => p.TeamId).IsModified = subTeam.TeamId != null;
+            _context.Entry(subTeam).Property(p => p.SubTeamId).IsModified = subTeam.SubTeamId != null;
+            _context.Entry(subTeam).Property(p => p.CalendarId).IsModified = subTeam.CalendarId != null;
+            _context.Entry(subTeam).Property(p => p.PayrollId).IsModified = subTeam.PayrollId != null;
+            _context.Entry(subTeam).Property(p => p.WorkStatusTemplateId).IsModified = subTeam.WorkStatusTemplateId != null;
 
             try
             {

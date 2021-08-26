@@ -53,5 +53,36 @@ public class DepartmentValidator : AbstractValidator<DepartmentRequest>
         }
 
 
+        if ( HttpMethods.IsPost(requestMethod) || HttpMethods.IsPut(requestMethod)) {
+
+            When(payload => payload.CalendarId != null, () => {
+                RuleFor(payload => payload.CalendarId)
+                    .Must(CalendarId =>
+                        {
+                            return _context.Calendar.FirstOrDefault(x => x.Id == CalendarId) != null;
+                        })
+                    .WithMessage("'CalendarId' does not exists");
+            });  
+
+            When(payload => payload.PayrollId != null, () => {
+                RuleFor(payload => payload.PayrollId)
+                    .Must(PayrollId =>
+                        {
+                            return _context.Payroll.FirstOrDefault(x => x.Id == PayrollId) != null;
+                        })
+                    .WithMessage("'PayrollId' does not exists");
+            });  
+
+            When(payload => payload.WorkStatusTemplateId != null, () => {
+                RuleFor(payload => payload.WorkStatusTemplateId)
+                    .Must(WorkStatusTemplateId =>
+                        {
+                            return _context.WorkStatusTemplate.FirstOrDefault(x => x.Id == WorkStatusTemplateId) != null;
+                        })
+                    .WithMessage("'WorkStatusTemplateId' does not exists");
+            });  
+        }
+
+
     }
 }

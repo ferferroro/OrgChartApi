@@ -58,7 +58,7 @@ namespace OrgChartApi.Controllers
         // PUT: api/Employee/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEmployee(long id, Employee employee)
+        public async Task<IActionResult> PutEmployee(long id, EmployeeRequest employee)
         {
             if (id != employee.Id)
             {
@@ -87,6 +87,11 @@ namespace OrgChartApi.Controllers
             _context.Entry(employee).Property(p => p.LastName).IsModified = employee.LastName != null;
             // _context.Entry(employee).Property(p => p.Username).IsModified = employee.Username != null;
             // _context.Entry(employee).Property(p => p.Password).IsModified = false;
+
+
+            _context.Entry(employee).Property(p => p.CalendarId).IsModified = employee.CalendarId != null;
+            _context.Entry(employee).Property(p => p.PayrollId).IsModified = employee.PayrollId != null;
+            _context.Entry(employee).Property(p => p.WorkStatusTemplateId).IsModified = employee.WorkStatusTemplateId != null;
             
             try
             {
@@ -110,7 +115,7 @@ namespace OrgChartApi.Controllers
         // POST: api/Employee
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Employee>> PostEmployee(Employee employee)
+        public async Task<ActionResult<Employee>> PostEmployee(EmployeeRequest employee)
         {
             _context.Employee.Add(employee);
             await _context.SaveChangesAsync();
