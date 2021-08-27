@@ -40,7 +40,7 @@ namespace OrgChartApi.Controllers
                 .Include(p => p.Payroll)
                 .Include(p => p.WorkStatusTemplate)
                 .Include(p => p.Employee)
-                .Include(p => p.EntityMembers)
+                .Include("EntityMembers.Employee")
                 .ToListAsync(); 
         }
 

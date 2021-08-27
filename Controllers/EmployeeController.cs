@@ -38,7 +38,11 @@ namespace OrgChartApi.Controllers
                 .Include(p => p.Calendar)
                 .Include(p => p.Payroll)
                 .Include(p => p.WorkStatusTemplate)
-                .Include(p => p.EntityMembers)
+                .Include("EntityMembers.Employee")
+                .Include("EntityMembers.Company")
+                .Include("EntityMembers.Department")
+                .Include("EntityMembers.Team")
+                .Include("EntityMembers.SubTeam")
                 .ToListAsync();        
         }
 

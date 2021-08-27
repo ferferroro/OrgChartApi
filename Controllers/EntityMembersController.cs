@@ -31,6 +31,7 @@ namespace OrgChartApi.Controllers
             FilterEntityRequest(ref query, entityMembers);
 
             return await query
+                .Include(p => p.Employee)
                 .Include(p => p.Company)
                 .Include(p => p.Department)
                 .Include(p => p.Team)
