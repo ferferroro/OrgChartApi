@@ -16,11 +16,11 @@ namespace OrgChartApi.Controllers
     [Route("v1/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class EmployeeController : EntityBaseController
+    public class EmployeeControllerBackUp : EntityBaseController
     {
         private readonly OrgChartContext _context;
 
-        public EmployeeController(OrgChartContext context)
+        public EmployeeControllerBackUp(OrgChartContext context)
         {
             _context = context;
         }
@@ -53,7 +53,7 @@ namespace OrgChartApi.Controllers
             // actual start
 
 
-            // get all employees
+             // get all employees
             var list = query.ToList();
 
             // get all employee ids and store to another array variable
@@ -75,8 +75,20 @@ namespace OrgChartApi.Controllers
                 d => d.CompanyId
             ).ToList();
 
+            // get department Ids based on the entity mebers
+            var departmentIds = entityMembers.Select(
+                d => d.DepartmentId
+            ).ToList();
 
-            /*** COMPANY START ***/
+            // get team Ids based on the entity mebers
+            var teamIds = entityMembers.Select(
+                d => d.TeamId
+            ).ToList();
+
+            // get subteam Ids based on the entity mebers
+            var subTeamIds = entityMembers.Select(
+                d => d.SubTeamId
+            ).ToList();
 
             // Get Entity objects from the list of Ids
             /*
@@ -84,6 +96,18 @@ namespace OrgChartApi.Controllers
             */
             var companys = _context.Company.Where(
                 d => companyIds.Contains(d.Id)
+            ).ToList();
+
+            var departments = _context.Department.Where(
+                d => departmentIds.Contains(d.Id)
+            ).ToList();
+
+            var teams = _context.Team.Where(
+                d => teamIds.Contains(d.Id)
+            ).ToList();
+
+            var subTeams = _context.SubTeam.Where(
+                d => subTeamIds.Contains(d.Id)
             ).ToList();
 
             // Get Templates Ids of entities
@@ -99,35 +123,6 @@ namespace OrgChartApi.Controllers
                 d => d.WorkStatusTemplateId
             ).ToList();
 
-            // get template objects
-            var companyCalendars = _context.Calendar.Where(
-                d => companyCalendarIds.Contains(d.Id)
-            ).ToList();
-
-            var companyPayrolls = _context.Payroll.Where(
-                d => companyPayrollIds.Contains(d.Id)
-            ).ToList();
-
-            var companyWorkStatusTemplates = _context.WorkStatusTemplate.Where(
-                d => companyWorkStatusTemplateIds.Contains(d.Id)
-            ).ToList();
-
-            /*** COMPANY END ***/
-
-
-            /***  DEPARTMENT START ***/
-            
-            // get department Id's from the Entity Members
-            var departmentIds = entityMembers.Select(
-                d => d.DepartmentId
-            ).ToList();
-
-            // get the department objects
-            var departments = _context.Department.Where(
-                d => departmentIds.Contains(d.Id)
-            ).ToList();
-
-            // get the department Template IDs
             var departmentCalendarIds = departments.Select(
                 d => d.CalendarId
             ).ToList();
@@ -140,36 +135,6 @@ namespace OrgChartApi.Controllers
                 d => d.WorkStatusTemplateId
             ).ToList();
 
-            // get Department Template objects
-            var departmentCalendars = _context.Calendar.Where(
-                d => departmentCalendarIds.Contains(d.Id)
-            ).ToList();
-
-            var departmentPayrolls = _context.Payroll.Where(
-                d => departmentPayrollIds.Contains(d.Id)
-            ).ToList();
-
-            var departmentWorkStatusTemplates = _context.WorkStatusTemplate.Where(
-                d => departmentWorkStatusTemplateIds.Contains(d.Id)
-            ).ToList();
-
-
-            /*** DEPARTMENT END ***/
-
-
-            /*** TEAM START ***/
-
-            // get team Ids based on the entity mebers
-            var teamIds = entityMembers.Select(
-                d => d.TeamId
-            ).ToList();
-
-            // get team objects
-            var teams = _context.Team.Where(
-                d => teamIds.Contains(d.Id)
-            ).ToList();
-
-            // get team entity ids
             var teamCalendarIds = teams.Select(
                 d => d.CalendarId
             ).ToList();
@@ -182,35 +147,6 @@ namespace OrgChartApi.Controllers
                 d => d.WorkStatusTemplateId
             ).ToList();
 
-            // get Team Template objects
-            var teamCalendars = _context.Calendar.Where(
-                d => teamCalendarIds.Contains(d.Id)
-            ).ToList();
-
-            var teamPayrolls = _context.Payroll.Where(
-                d => teamPayrollIds.Contains(d.Id)
-            ).ToList();
-
-            var teamWorkStatusTemplates = _context.WorkStatusTemplate.Where(
-                d => teamWorkStatusTemplateIds.Contains(d.Id)
-            ).ToList();
-
-
-            /*** TEAM END ***/
-
-            /*** SUBTEAM START ***/
-
-            // get subteam Ids based on the entity mebers
-            var subTeamIds = entityMembers.Select(
-                d => d.SubTeamId
-            ).ToList();
-            
-            // get sub team objects
-            var subTeams = _context.SubTeam.Where(
-                d => subTeamIds.Contains(d.Id)
-            ).ToList();
-
-            // get subteam template IDs
             var subTeamCalendarIds = subTeams.Select(
                 d => d.CalendarId
             ).ToList();
@@ -224,189 +160,91 @@ namespace OrgChartApi.Controllers
             ).ToList();
 
 
-            // get SubTeam Template objects
-            var subTeamCalendars = _context.Calendar.Where(
-                d => subTeamCalendarIds.Contains(d.Id)
-            ).ToList();
-
-            var subTeamPayrolls = _context.Payroll.Where(
-                d => subTeamPayrollIds.Contains(d.Id)
-            ).ToList();
-
-            var subTeamWorkStatusTemplates = _context.WorkStatusTemplate.Where(
-                d => subTeamWorkStatusTemplateIds.Contains(d.Id)
-            ).ToList();
-
-            /*** SUBTEAM END ***/
-
-
-
-
-
-            /*** SUB-SUBTEAM END ***/
-
-            // check if this sub-Team has also a child sub-team
-            var subSubTeamIds = subTeams.Select(
-                        d => d.SubTeamId
-                    ).ToList();
-
-            // if has sub-sub-team then loop for other
-            bool digSubTeams = subSubTeamIds.Any();
-
-            if (digSubTeams) {
-
-                // store to a temporary variable 
-                var subSubTeamIdsTmp = subSubTeamIds;
-
-                // perform a loop
-                while (digSubTeams == true) 
-                {
-                    // get the subteam based onthe subTeamId
-                    var subSubTeam = _context.SubTeam.Where(
-                        d => subSubTeamIdsTmp.Contains(d.Id)
-                    ).ToList();
-
-                    // if no result then exit the loop
-                    if (!subSubTeam.Any()) {
-                        digSubTeams = false;
-                    }
-                    else {
-
-                        // refresh the temp variable 
-                        subSubTeamIdsTmp = subSubTeam.Select(
-                            d => d.SubTeamId
-                        ).ToList();
-
-                        subSubTeamIds.AddRange(subSubTeamIdsTmp);  
-                    }
-
-                }
-            }
-
-            // get sub team objects
-            var subSubTeams = _context.SubTeam.Where(
-                d => subSubTeamIds.Contains(d.Id)
-            ).ToList();
-
-            // get sub-subteam template IDs
-            var subSubTeamCalendarIds = subSubTeams.Select(
+            // get template ids
+            var calendarIds = list.Select(
                 d => d.CalendarId
             ).ToList();
 
-            var subSubTeamPayrollIds = subSubTeams.Select(
+            var payrollIds = list.Select(
                 d => d.PayrollId
             ).ToList();
 
-            var subSubTeamWorkStatusTemplateIds = subSubTeams.Select(
+            var workStatusTemplateIds = list.Select(
                 d => d.WorkStatusTemplateId
             ).ToList();
 
+            
+                //SEPARATE TEMPLATE FETCH FOR EVERY INTITY
 
-            // get SubTeam Template objects
-            var subSubTeamCalendars = _context.Calendar.Where(
-                d => subSubTeamCalendarIds.Contains(d.Id)
+
+            // combine or consolidate Template Ids
+            calendarIds.AddRange(companyCalendarIds);
+            calendarIds.AddRange(departmentCalendarIds);
+            calendarIds.AddRange(teamCalendarIds);
+            calendarIds.AddRange(subTeamCalendarIds);   
+
+            payrollIds.AddRange(companyPayrollIds);
+            payrollIds.AddRange(departmentPayrollIds);
+            payrollIds.AddRange(teamPayrollIds);
+            payrollIds.AddRange(subTeamPayrollIds);      
+
+            workStatusTemplateIds.AddRange(companyWorkStatusTemplateIds);
+            workStatusTemplateIds.AddRange(departmentWorkStatusTemplateIds);
+            workStatusTemplateIds.AddRange(teamWorkStatusTemplateIds);
+            workStatusTemplateIds.AddRange(subTeamWorkStatusTemplateIds);   
+
+            // get template objects
+            var calendars = _context.Calendar.Where(
+                d => calendarIds.Contains(d.Id)
             ).ToList();
 
-            var subSubTeamPayrolls = _context.Payroll.Where(
-                d => subSubTeamPayrollIds.Contains(d.Id)
+            var payrolls = _context.Payroll.Where(
+                d => payrollIds.Contains(d.Id)
             ).ToList();
 
-            var subSubTeamWorkStatusTemplates = _context.WorkStatusTemplate.Where(
-                d => subSubTeamWorkStatusTemplateIds.Contains(d.Id)
+            var workStatusTemplates = _context.WorkStatusTemplate.Where(
+                d => workStatusTemplateIds.Contains(d.Id)
             ).ToList();
 
+            
 
-            /*** SUB-SUBTEAM END ***/
-
+            /**
+            copy of comment from above...
+            5. process each template inheritance
+                    a. loop all employees
+                    b. get employees entity members
+                    c. check if employee has templates
+                    d. if null then check the next available entity based on heirarchy
+            */
 
             // a. loop all employees
             foreach (var emp in list) {
                 // b. get employees entity members
                 var entityMember = entityMembers.FirstOrDefault(d => d.EmployeeId == emp.Id);
 
-                emp.Calendar = _context.Calendar.Find(emp.CalendarId);
-
                 
-                if (emp.Calendar == null) {
-
-                    // get from sub-sub team
-                    emp.Calendar = subSubTeamCalendars.LastOrDefault();
+                if (emp.CalendarId == null || emp.CalendarId == 0) {
+                    // todo create your own way of inheriting whatever the next avaialble template
+                    emp.Calendar = calendars.LastOrDefault();
 
                     // get from sub team
-                    if (emp.Calendar == null) {
-                        emp.Calendar = subTeamCalendars.LastOrDefault();
-                    }
 
                     // get  from team
-                    if (emp.Calendar == null) {
-                        emp.Calendar = teamCalendars.LastOrDefault();
-                    }
 
                     // get from department
-                    if (emp.Calendar == null) {
-                        emp.Calendar = departmentCalendars.LastOrDefault();
-                    }
 
                     // get from company
-                    if (emp.Calendar == null) {
-                        emp.Calendar = companyCalendars.LastOrDefault();
-                    }
+
+
+                    // emp.Calendar = _context.Calendar.Find(1);
                 }
 
-                emp.Payroll = _context.Payroll.Find(emp.PayrollId);
-
-                if (emp.Payroll == null) {
-
-                    // get from sub-sub team
-                    emp.Payroll = subSubTeamPayrolls.LastOrDefault();
-
-                    // get from sub team
-                    if (emp.Calendar == null) {
-                        emp.Payroll = subTeamPayrolls.FirstOrDefault();
-                    }
-
-                    // get  from team
-                    if (emp.Payroll == null) {
-                        emp.Payroll = teamPayrolls.LastOrDefault();
-                    }
-
-                    // get from department
-                    if (emp.Payroll == null) {
-                        emp.Payroll = departmentPayrolls.LastOrDefault();
-                    }
-
-                    // get from company
-                    if (emp.Payroll == null) {
-                        emp.Payroll = companyPayrolls.LastOrDefault();
-                    }
+                if (emp.PayrollId == null || emp.PayrollId == 0) {
+                    emp.Payroll = payrolls.FirstOrDefault();
                 }
 
-                emp.WorkStatusTemplate = _context.WorkStatusTemplate.Find(emp.WorkStatusTemplateId);
-
-                if (emp.WorkStatusTemplate == null) {
-
-                    // get from sub-sub team
-                    emp.WorkStatusTemplate = subSubTeamWorkStatusTemplates.LastOrDefault();
-
-                    // get from sub team
-                    if (emp.Calendar == null) {
-                        emp.WorkStatusTemplate = subTeamWorkStatusTemplates.FirstOrDefault();
-                    }
-
-                    // get  from team
-                    if (emp.WorkStatusTemplate == null) {
-                        emp.WorkStatusTemplate = teamWorkStatusTemplates.LastOrDefault();
-                    }
-
-                    // get from department
-                    if (emp.WorkStatusTemplate == null) {
-                        emp.WorkStatusTemplate = departmentWorkStatusTemplates.LastOrDefault();
-                    }
-
-                    // get from company
-                    if (emp.WorkStatusTemplate == null) {
-                        emp.WorkStatusTemplate = companyWorkStatusTemplates.LastOrDefault();
-                    }
+                if (emp.WorkStatusTemplateId == null || emp.WorkStatusTemplateId == 0) {
+                    emp.WorkStatusTemplate = workStatusTemplates.FirstOrDefault();
                 }
 
             } 
