@@ -210,114 +210,340 @@ namespace OrgChartApi.Controllers
                 d => subTeamIds.Contains(d.Id)
             ).ToList();
 
-            // get subteam template IDs
-            var subTeamCalendarIds = subTeams.Select(
-                d => d.CalendarId
-            ).ToList();
-
-            var subTeamPayrollIds = subTeams.Select(
-                d => d.PayrollId
-            ).ToList();
-
-            var subTeamWorkStatusTemplateIds = subTeams.Select(
-                d => d.WorkStatusTemplateId
-            ).ToList();
+            // get a template to be inherit based on the sub team and team hierarachy
 
 
-            // get SubTeam Template objects
-            var subTeamCalendars = _context.Calendar.Where(
-                d => subTeamCalendarIds.Contains(d.Id)
-            ).ToList();
+            // Retrieve sub team calender START!
 
-            var subTeamPayrolls = _context.Payroll.Where(
-                d => subTeamPayrollIds.Contains(d.Id)
-            ).ToList();
+            long? subTeamCalendarId = 0;
 
-            var subTeamWorkStatusTemplates = _context.WorkStatusTemplate.Where(
-                d => subTeamWorkStatusTemplateIds.Contains(d.Id)
-            ).ToList();
+            foreach (var subTeam in subTeams.OrderByDescending(s => s.Id)) {
 
-            /*** SUBTEAM END ***/
+                if (subTeamCalendarId == 0) {
+                    // save the calender Id of the subteam
+                    subTeamCalendarId = subTeam.CalendarId;
 
+                    if (subTeamCalendarId == null) {
+                        subTeamCalendarId = 0;
+                    }
 
+                    // the sub team calendar id is zero
+                    if (subTeamCalendarId == 0) {
 
+                        // check if this subteam has a parent Sub team
+                        var lGetParent = true;
+                        var iCurrSubTeamId = subTeam.Id;
 
+                        while (lGetParent) {
 
-            /*** SUB-SUBTEAM END ***/
+                            var parentSubTeam = _context.SubTeam.FirstOrDefault(d => d.SubTeamId == iCurrSubTeamId);
 
-            // check if this sub-Team has also a child sub-team
-            var subSubTeamIds = subTeams.Select(
-                        d => d.SubTeamId
-                    ).ToList();
+                            if (parentSubTeam != null) {
+                                // it has a parent sub team
 
-            // if has sub-sub-team then loop for other
-            bool digSubTeams = subSubTeamIds.Any();
+                                // does this Parent sub team has calender ID? then use it and exit the loop
+                                if (parentSubTeam.CalendarId != null && parentSubTeam.CalendarId != 0) {
+                                    subTeamCalendarId = parentSubTeam.CalendarId;
+                                    lGetParent = false;
+                                }
+                                else {
+                                    // the parent sub team does not have calender ID, 
+                                    
+                                    // rerun loop to check if this parent subteam has another parent sub team as wll
+                                    iCurrSubTeamId = parentSubTeam.Id;
+                                }
+                            }
+                            else {
+                                // it does not have any parent
+                                lGetParent = false;
+                            }
+                        }
+                    }
+                }
+                else {
+                    break;
+                }
+      
+            }
 
-            if (digSubTeams) {
+            if (subTeamCalendarId == 0) {
+                // get the last team's calendar ID
+                foreach (var subTeam in subTeams.OrderByDescending(s => s.Id)) {
 
-                // store to a temporary variable 
-                var subSubTeamIdsTmp = subSubTeamIds;
+                    if (subTeamCalendarId == 0) {
 
-                // perform a loop
-                while (digSubTeams == true) 
-                {
-                    // get the subteam based onthe subTeamId
-                    var subSubTeam = _context.SubTeam.Where(
-                        d => subSubTeamIdsTmp.Contains(d.Id)
-                    ).ToList();
+                        var parentTeam = _context.Team.FirstOrDefault(d => d.Id == subTeam.TeamId);
 
-                    // if no result then exit the loop
-                    if (!subSubTeam.Any()) {
-                        digSubTeams = false;
+                        if (parentTeam != null) {
+                            subTeamCalendarId = parentTeam.CalendarId;
+
+                            if (subTeamCalendarId == null) {
+                                subTeamCalendarId = 0;
+                            }
+                        }
+
                     }
                     else {
-
-                        // refresh the temp variable 
-                        subSubTeamIdsTmp = subSubTeam.Select(
-                            d => d.SubTeamId
-                        ).ToList();
-
-                        subSubTeamIds.AddRange(subSubTeamIdsTmp);  
+                        break;
                     }
-
+        
                 }
             }
 
-            // get sub team objects
-            var subSubTeams = _context.SubTeam.Where(
-                d => subSubTeamIds.Contains(d.Id)
+            // get SubTeam Template objects
+            var subTeamCalendars = _context.Calendar.Where(
+                d => d.Id == subTeamCalendarId
             ).ToList();
 
-            // get sub-subteam template IDs
-            var subSubTeamCalendarIds = subSubTeams.Select(
-                d => d.CalendarId
-            ).ToList();
+            // Retrieve sub team calender END!
 
-            var subSubTeamPayrollIds = subSubTeams.Select(
-                d => d.PayrollId
-            ).ToList();
 
-            var subSubTeamWorkStatusTemplateIds = subSubTeams.Select(
-                d => d.WorkStatusTemplateId
-            ).ToList();
+            // Retrieve sub team Payroll START!
+            long? subTeamPayrollId = 0;
 
+            foreach (var subTeam in subTeams.OrderByDescending(s => s.Id)) {
+
+                if (subTeamPayrollId == 0) {
+                    // save the payroll Id of the subteam
+                    subTeamPayrollId = subTeam.PayrollId;
+
+                    if (subTeamPayrollId == null) {
+                        subTeamPayrollId = 0;
+                    }
+
+                    // the sub team Payroll id is zero
+                    if (subTeamPayrollId == 0) {
+
+                        // check if this subteam has a parent Sub team
+                        var lGetParent = true;
+                        var iCurrSubTeamId = subTeam.Id;
+
+                        while (lGetParent) {
+
+                            var parentSubTeam = _context.SubTeam.FirstOrDefault(d => d.SubTeamId == iCurrSubTeamId);
+
+                            if (parentSubTeam != null) {
+                                // it has a parent sub team
+
+                                // does this Parent sub team has payroll ID? then use it and exit the loop
+                                if (parentSubTeam.PayrollId != null && parentSubTeam.PayrollId != 0) {
+                                    subTeamPayrollId = parentSubTeam.PayrollId;
+                                    lGetParent = false;
+                                }
+                                else {
+                                    // the parent sub team does not have payroll ID, 
+                                    
+                                    // rerun loop to check if this parent subteam has another parent sub team as wll
+                                    iCurrSubTeamId = parentSubTeam.Id;
+                                }
+                            }
+                            else {
+                                // it does not have any parent
+                                lGetParent = false;
+                            }
+                        }
+                    }
+                }
+                else {
+                    break;
+                }
+      
+            }
+
+            if (subTeamPayrollId == 0) {
+                // get the last team's Payroll ID
+                foreach (var subTeam in subTeams.OrderByDescending(s => s.Id)) {
+
+                    if (subTeamPayrollId == 0) {
+
+                        var parentTeam = _context.Team.FirstOrDefault(d => d.Id == subTeam.TeamId);
+
+                        if (parentTeam != null) {
+                            subTeamPayrollId = parentTeam.PayrollId;
+
+                            if (subTeamPayrollId == null) {
+                                subTeamPayrollId = 0;
+                            }
+                        }
+
+                    }
+                    else {
+                        break;
+                    }
+        
+                }
+            }
 
             // get SubTeam Template objects
-            var subSubTeamCalendars = _context.Calendar.Where(
-                d => subSubTeamCalendarIds.Contains(d.Id)
+            var subTeamPayrolls = _context.Payroll.Where(
+                d => d.Id == subTeamPayrollId
             ).ToList();
 
-            var subSubTeamPayrolls = _context.Payroll.Where(
-                d => subSubTeamPayrollIds.Contains(d.Id)
+            // Retrieve sub team Payroll END!
+
+            // Retrieve sub team Workstatus Template START!
+
+            long? subTeamWorkStatusTemplateId = 0;
+
+            foreach (var subTeam in subTeams.OrderByDescending(s => s.Id)) {
+
+                if (subTeamWorkStatusTemplateId == 0) {
+                    // save the workstatustemplate Id of the subteam
+                    subTeamWorkStatusTemplateId = subTeam.WorkStatusTemplateId;
+
+                    if (subTeamWorkStatusTemplateId == null) {
+                        subTeamWorkStatusTemplateId = 0;
+                    }
+
+                    // the sub team WorkStatusTemplate id is zero
+                    if (subTeamWorkStatusTemplateId == 0) {
+
+                        // check if this subteam has a parent Sub team
+                        var lGetParent = true;
+                        var iCurrSubTeamId = subTeam.Id;
+
+                        while (lGetParent) {
+
+                            var parentSubTeam = _context.SubTeam.FirstOrDefault(d => d.SubTeamId == iCurrSubTeamId);
+
+                            if (parentSubTeam != null) {
+                                // it has a parent sub team
+
+                                // does this Parent sub team has workstatustemplate ID? then use it and exit the loop
+                                if (parentSubTeam.WorkStatusTemplateId != null && parentSubTeam.WorkStatusTemplateId != 0) {
+                                    subTeamWorkStatusTemplateId = parentSubTeam.WorkStatusTemplateId;
+                                    lGetParent = false;
+                                }
+                                else {
+                                    // the parent sub team does not have workstatustemplate ID, 
+                                    
+                                    // rerun loop to check if this parent subteam has another parent sub team as wll
+                                    iCurrSubTeamId = parentSubTeam.Id;
+                                }
+                            }
+                            else {
+                                // it does not have any parent
+                                lGetParent = false;
+                            }
+                        }
+                    }
+                }
+                else {
+                    break;
+                }
+      
+            }
+
+            if (subTeamWorkStatusTemplateId == 0) {
+                // get the last team's WorkStatusTemplate ID
+                foreach (var subTeam in subTeams.OrderByDescending(s => s.Id)) {
+
+                    if (subTeamWorkStatusTemplateId == 0) {
+
+                        var parentTeam = _context.Team.FirstOrDefault(d => d.Id == subTeam.TeamId);
+
+                        if (parentTeam != null) {
+                            subTeamWorkStatusTemplateId = parentTeam.WorkStatusTemplateId;
+
+                            if (subTeamWorkStatusTemplateId == null) {
+                                subTeamWorkStatusTemplateId = 0;
+                            }
+                        }
+
+                    }
+                    else {
+                        break;
+                    }
+        
+                }
+            }
+
+            // get SubTeam Template objects
+            var subTeamWorkStatusTemplates = _context.WorkStatusTemplate.Where(
+                d => d.Id == subTeamWorkStatusTemplateId
             ).ToList();
 
-            var subSubTeamWorkStatusTemplates = _context.WorkStatusTemplate.Where(
-                d => subSubTeamWorkStatusTemplateIds.Contains(d.Id)
-            ).ToList();
+            // Retrieve sub team Workstatus Template END!
+
+        
+
+            // the logic below are all wrong but comment it for now incase we need it later on...
 
 
             /*** SUB-SUBTEAM END ***/
 
+            // // check if this sub-Team has also a child sub-team
+            // var subSubTeamIds = subTeams.Select(
+            //             d => d.SubTeamId
+            //         ).ToList();
+
+            // // if has sub-sub-team then loop for other
+            // bool digSubTeams = subSubTeamIds.Any();
+
+            // if (digSubTeams) {
+
+            //     // store to a temporary variable 
+            //     var subSubTeamIdsTmp = subSubTeamIds;
+
+            //     // perform a loop
+            //     while (digSubTeams == true) 
+            //     {
+            //         // get the subteam based onthe subTeamId
+            //         var subSubTeam = _context.SubTeam.Where(
+            //             d => subSubTeamIdsTmp.Contains(d.Id)
+            //         ).ToList();
+
+            //         // if no result then exit the loop
+            //         if (!subSubTeam.Any()) {
+            //             digSubTeams = false;
+            //         }
+            //         else {
+
+            //             // refresh the temp variable 
+            //             subSubTeamIdsTmp = subSubTeam.Select(
+            //                 d => d.SubTeamId
+            //             ).ToList();
+
+            //             subSubTeamIds.AddRange(subSubTeamIdsTmp);  
+            //         }
+
+            //     }
+            // }
+
+            // // get sub team objects
+            // var subSubTeams = _context.SubTeam.Where(
+            //     d => subSubTeamIds.Contains(d.Id)
+            // ).ToList();
+
+            // // get sub-subteam template IDs
+            // var subSubTeamCalendarIds = subSubTeams.Select(
+            //     d => d.CalendarId
+            // ).ToList();
+
+            // var subSubTeamPayrollIds = subSubTeams.Select(
+            //     d => d.PayrollId
+            // ).ToList();
+
+            // var subSubTeamWorkStatusTemplateIds = subSubTeams.Select(
+            //     d => d.WorkStatusTemplateId
+            // ).ToList();
+
+
+            // // get SubTeam Template objects
+            // var subSubTeamCalendars = _context.Calendar.Where(
+            //     d => subSubTeamCalendarIds.Contains(d.Id)
+            // ).ToList();
+
+            // var subSubTeamPayrolls = _context.Payroll.Where(
+            //     d => subSubTeamPayrollIds.Contains(d.Id)
+            // ).ToList();
+
+            // var subSubTeamWorkStatusTemplates = _context.WorkStatusTemplate.Where(
+            //     d => subSubTeamWorkStatusTemplateIds.Contains(d.Id)
+            // ).ToList();
+
+
+            /*** SUB-SUBTEAM END ***/
 
             // a. loop all employees
             foreach (var emp in list) {
@@ -329,8 +555,8 @@ namespace OrgChartApi.Controllers
                 
                 if (emp.Calendar == null) {
 
-                    // get from sub-sub team
-                    emp.Calendar = subSubTeamCalendars.LastOrDefault();
+                    // // get from sub-sub team
+                    // emp.Calendar = subSubTeamCalendars.LastOrDefault();
 
                     // get from sub team
                     if (emp.Calendar == null) {
@@ -357,11 +583,11 @@ namespace OrgChartApi.Controllers
 
                 if (emp.Payroll == null) {
 
-                    // get from sub-sub team
-                    emp.Payroll = subSubTeamPayrolls.LastOrDefault();
+                    // // get from sub-sub team
+                    // emp.Payroll = subSubTeamPayrolls.LastOrDefault();
 
                     // get from sub team
-                    if (emp.Calendar == null) {
+                    if (emp.Payroll == null) {
                         emp.Payroll = subTeamPayrolls.FirstOrDefault();
                     }
 
@@ -385,11 +611,11 @@ namespace OrgChartApi.Controllers
 
                 if (emp.WorkStatusTemplate == null) {
 
-                    // get from sub-sub team
-                    emp.WorkStatusTemplate = subSubTeamWorkStatusTemplates.LastOrDefault();
+                    // // get from sub-sub team
+                    // emp.WorkStatusTemplate = subSubTeamWorkStatusTemplates.LastOrDefault();
 
                     // get from sub team
-                    if (emp.Calendar == null) {
+                    if (emp.WorkStatusTemplate == null) {
                         emp.WorkStatusTemplate = subTeamWorkStatusTemplates.FirstOrDefault();
                     }
 
